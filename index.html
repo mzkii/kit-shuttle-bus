@@ -34,37 +34,50 @@
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script>
             time();
+            function getTimeDiff(second, date) {
+                return second - (date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds());
+            }
+            function getTimeDiffAsString(diff) {
+                return ('00' + Math.floor(diff / 60 / 60)).slice(-2) + ":" +
+                    ('00' + Math.floor((diff / 60) % 60)).slice(-2) + ":" +
+                    ('00' + diff % 60).slice(-2);
+            }
             function time() {
                 var now = new Date();
                 document.getElementById("time").innerHTML = now.toLocaleTimeString();
-
                 var timetable = document.getElementById('timetable');
-
                 var date = new Date();
-
                 for (var i = 1; i < timetable.rows.length; i++) {
                     var hour = parseInt(timetable.rows[i].cells[1].innerText.substr(0, 2));
                     var min = parseInt(timetable.rows[i].cells[1].innerText.substr(3, 4));
                     var second = hour * 60 * 60 + min * 60;
-                    var diff = Math.abs(second - (date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds()));
-                    timetable.rows[i].cells[2].innerText =
-                        ('00' + Math.floor(diff / 60 / 60)).slice(-2) + ":" +
-                        ('00' + Math.floor((diff / 60) % 60)).slice(-2) + ":" +
-                        ('00' + diff % 60).slice(-2);
+                    var diff = getTimeDiff(second, date);
+                    if (diff < 0) {
+                        timetable.deleteRow(i);
+                        i = 0;
+                    }
+                    else timetable.rows[i].cells[2].innerText = getTimeDiffAsString(diff);
                 }
             }
             setInterval('time()', 1000);
-
             /**
              * 行追加
              */
-            function insertRow(data, isSunday, isSummer) {
+            function insertRow(data, date, isSummer) {
 
                 // 土曜運行のセルを排除
+                var isSunday = date.getDay() == 6;
                 if (isSunday && !data.hasSat) return;
 
                 // 夏季運行のセルを排除
                 if (isSummer && !data.hasSummer) return;
+
+                // 出発している便を排除
+                var hour = parseInt(data.departure.substr(0, 2));
+                var min = parseInt(data.departure.substr(3, 4));
+                var second = hour * 60 * 60 + min * 60;
+                var diff = getTimeDiff(second, date);
+                if (diff < 0) return;
 
                 var table = document.getElementById('timetable');
                 var row = table.insertRow(-1);
@@ -81,7 +94,7 @@
                 departure.innerHTML = data.departure;
 
                 // 残り時間
-                timeRemaining.innerHTML = "";
+                timeRemaining.innerHTML = getTimeDiffAsString(diff);
 
                 // 備考
                 if (isSunday && data.hasSat && isSummer && data.hasSummer) remarks.innerHTML = "土曜/夏季運行";
@@ -92,7 +105,7 @@
                 $.getJSON("https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/gh-pages/timetable.json", function (data) {
                     var date = new Date();
                     for (var i = 0; i < data.length; i++) {
-                        insertRow(data[i], date.getDay() == 6, false);
+                        insertRow(data[i], date, false);
                     }
                 });
             });
