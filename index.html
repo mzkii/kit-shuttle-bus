@@ -34,8 +34,11 @@
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script>
             time();
+            function getNowTimeAsSecond(date) {
+                return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
+            }
             function getTimeDiff(second, date) {
-                return second - (date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds());
+                return second - getNowTimeAsSecond(date);
             }
             function getTimeDiffAsString(diff) {
                 return ('00' + Math.floor(diff / 60 / 60)).slice(-2) + ":" +
@@ -60,6 +63,7 @@
                 }
             }
             setInterval('time()', 1000);
+            setTimeout("location.reload()", 1000 * 60 * 60);
             /**
              * 行追加
              */
