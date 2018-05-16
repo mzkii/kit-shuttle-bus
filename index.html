@@ -16,7 +16,12 @@
 </head>
 
 <body>
-    <h2 id="time"></h2>
+    <br>
+    <h2>KIT シャトルバス時刻表</h2>
+    <br>
+    <div class="alert alert-success" role="alert" style=display:none>...</div>
+    <div class="alert alert-danger" role="alert" style=display:none>...</div>
+
     <table class="table table-bordered" id="timetable">
         <thead>
             <tr>
@@ -61,7 +66,6 @@
         }
         function time() {
             var now = new Date();
-            document.getElementById("time").innerHTML = now.toLocaleTimeString();
             var timetable = document.getElementById('timetable');
             var date = new Date();
             for (var i = 1; i < timetable.rows.length; i++) {
