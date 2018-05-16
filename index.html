@@ -19,8 +19,8 @@
     <br>
     <h2>KIT シャトルバス時刻表</h2>
     <br>
-    <div class="alert alert-success" role="alert" style=display:none>...</div>
-    <div class="alert alert-danger" role="alert" style=display:none>...</div>
+    <div class="alert alert-success" role="alert" id="alert-success" style="display:none"></div>
+    <div class="alert alert-danger" role="alert" id="alert-danger" style="display:none">本日の運行は終了しました</div>
 
     <table class="table table-bordered" id="timetable">
         <thead>
@@ -37,7 +37,6 @@
     <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script>
-        time();
         function getColorClassName(diff) {
             // 残り5分 -> bg-danger
             if (diff < 60 * 5) {
@@ -64,8 +63,20 @@
                 ('00' + Math.floor((diff / 60) % 60)).slice(-2) + ":" +
                 ('00' + diff % 60).slice(-2);
         }
+        function hasAnyTable(timetable) {
+            return timetable.rows.length <= 1;
+        }
+        function setAnyBusAlertDisplay(visibility) {
+            var alertDanger = document.getElementById('alert-danger');
+            if (visibility) alertDanger.style.display = "block";
+            else alertDanger.style.display = "none";
+        }
+        function setTimeTableVisibility(visibility) {
+            var timetable = document.getElementById('timetable');
+            if (visibility) timetable.style.visibility = "visible";
+            else timetable.style.visibility = "hidden";
+        }
         function time() {
-            var now = new Date();
             var timetable = document.getElementById('timetable');
             var date = new Date();
             for (var i = 1; i < timetable.rows.length; i++) {
@@ -81,9 +92,9 @@
                 timetable.rows[i].className = getColorClassName(diff);
                 timetable.rows[i].cells[2].innerText = getTimeDiffAsString(diff);
             }
+            setAnyBusAlertDisplay(hasAnyTable(timetable));
+            setTimeTableVisibility(!hasAnyTable(timetable));
         }
-        setInterval('time()', 1000);
-        setTimeout("location.reload()", 1000 * 60 * 60);
         /**
          * 行追加
          */
@@ -91,7 +102,7 @@
 
             // 土曜運行のセルを排除
             var isSunday = date.getDay() == 6;
-            if (isSunday && !data.hasSat) return;
+            if (isSunday && !data.hasSat || !isSunday && data.hasSat) return;
 
             // 夏季運行のセルを排除
             if (isSummer && !data.hasSummer) return;
@@ -133,6 +144,8 @@
                 for (var i = 0; i < data.length; i++) {
                     insertRow(data[i], date, false);
                 }
+                setInterval('time()', 1000);
+                setTimeout("location.reload()", 1000 * 60 * 60);
             });
         });
     </script>
