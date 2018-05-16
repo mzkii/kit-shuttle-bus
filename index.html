@@ -9,6 +9,7 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
+    <link href="css/my-bootstrap.css" rel="stylesheet">
     <!--[if lt IE 9]>
         <script src="js/html5shiv.min.js"></script>
         <script src="js/respond.min.js"></script>
@@ -16,139 +17,141 @@
 </head>
 
 <body>
-    <br>
-    <h2>KIT シャトルバス時刻表</h2>
-    <br>
-    <div class="alert alert-success" role="alert" id="alert-success" style="display:none"></div>
-    <div class="alert alert-danger" role="alert" id="alert-danger" style="display:none">本日の運行は終了しました</div>
+    <div class="container">
+        <br>
+        <h2>KIT シャトルバス時刻表</h2>
+        <br>
+        <div class="alert alert-success" role="alert" id="alert-success" style="display:none"></div>
+        <div class="alert alert-danger" role="alert" id="alert-danger" style="display:none">本日の運行は終了しました</div>
 
-    <table class="table table-bordered" id="timetable">
-        <thead>
-            <tr>
-                <th>行き先</th>
-                <th>出発時刻</th>
-                <th>出発まで</th>
-                <th>備考</th>
-            </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-    </table>
+        <table class="table table-bordered" id="timetable">
+            <thead>
+                <tr>
+                    <th>行き先</th>
+                    <th>出発時刻</th>
+                    <th>出発まで</th>
+                    <th>備考</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
 
-    <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script>
-        function getColorClassName(diff) {
-            // 残り5分 -> bg-danger
-            if (diff < 60 * 5) {
-                return 'bg-danger';
+        <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script>
+            function getColorClassName(diff) {
+                // 残り5分 -> bg-danger
+                if (diff < 60 * 5) {
+                    return 'bg-danger';
+                }
+                // 残り15分 -> bg-warning
+                if (diff < 60 * 15) {
+                    return 'bg-warning';
+                }
+                // 残り1時間 -> bg-success
+                if (diff < 60 * 60) {
+                    return 'bg-success';
+                }
+                return 'bg-white';
             }
-            // 残り15分 -> bg-warning
-            if (diff < 60 * 15) {
-                return 'bg-warning';
+            function getNowTimeAsSecond(date) {
+                return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
             }
-            // 残り1時間 -> bg-success
-            if (diff < 60 * 60) {
-                return 'bg-success';
+            function getTimeDiff(second, date) {
+                return second - getNowTimeAsSecond(date);
             }
-            return 'bg-white';
-        }
-        function getNowTimeAsSecond(date) {
-            return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
-        }
-        function getTimeDiff(second, date) {
-            return second - getNowTimeAsSecond(date);
-        }
-        function getTimeDiffAsString(diff) {
-            return ('00' + Math.floor(diff / 60 / 60)).slice(-2) + ":" +
-                ('00' + Math.floor((diff / 60) % 60)).slice(-2) + ":" +
-                ('00' + diff % 60).slice(-2);
-        }
-        function hasAnyTable(timetable) {
-            return timetable.rows.length <= 1;
-        }
-        function setAnyBusAlertDisplay(visibility) {
-            var alertDanger = document.getElementById('alert-danger');
-            if (visibility) alertDanger.style.display = "block";
-            else alertDanger.style.display = "none";
-        }
-        function setTimeTableVisibility(visibility) {
-            var timetable = document.getElementById('timetable');
-            if (visibility) timetable.style.visibility = "visible";
-            else timetable.style.visibility = "hidden";
-        }
-        function time() {
-            var timetable = document.getElementById('timetable');
-            var date = new Date();
-            for (var i = 1; i < timetable.rows.length; i++) {
-                var hour = parseInt(timetable.rows[i].cells[1].innerText.substr(0, 2));
-                var min = parseInt(timetable.rows[i].cells[1].innerText.substr(3, 4));
+            function getTimeDiffAsString(diff) {
+                return ('00' + Math.floor(diff / 60 / 60)).slice(-2) + ":" +
+                    ('00' + Math.floor((diff / 60) % 60)).slice(-2) + ":" +
+                    ('00' + diff % 60).slice(-2);
+            }
+            function hasAnyTable(timetable) {
+                return timetable.rows.length <= 1;
+            }
+            function setAnyBusAlertDisplay(visibility) {
+                var alertDanger = document.getElementById('alert-danger');
+                if (visibility) alertDanger.style.display = "block";
+                else alertDanger.style.display = "none";
+            }
+            function setTimeTableVisibility(visibility) {
+                var timetable = document.getElementById('timetable');
+                if (visibility) timetable.style.visibility = "visible";
+                else timetable.style.visibility = "hidden";
+            }
+            function time() {
+                var timetable = document.getElementById('timetable');
+                var date = new Date();
+                for (var i = 1; i < timetable.rows.length; i++) {
+                    var hour = parseInt(timetable.rows[i].cells[1].innerText.substr(0, 2));
+                    var min = parseInt(timetable.rows[i].cells[1].innerText.substr(3, 4));
+                    var second = hour * 60 * 60 + min * 60;
+                    var diff = getTimeDiff(second, date);
+                    if (diff < 0) {
+                        timetable.deleteRow(i);
+                        i = 0;
+                        continue;
+                    }
+                    timetable.rows[i].className = getColorClassName(diff);
+                    timetable.rows[i].cells[2].innerText = getTimeDiffAsString(diff);
+                }
+                setAnyBusAlertDisplay(hasAnyTable(timetable));
+                setTimeTableVisibility(!hasAnyTable(timetable));
+            }
+            /**
+             * 行追加
+             */
+            function insertRow(data, date, isSummer) {
+
+                // 土曜運行のセルを排除
+                var isSunday = date.getDay() == 6;
+                if (isSunday && !data.hasSat || !isSunday && data.hasSat) return;
+
+                // 夏季運行のセルを排除
+                if (isSummer && !data.hasSummer) return;
+
+                // 出発している便を排除
+                var hour = parseInt(data.departure.substr(0, 2));
+                var min = parseInt(data.departure.substr(3, 4));
                 var second = hour * 60 * 60 + min * 60;
                 var diff = getTimeDiff(second, date);
-                if (diff < 0) {
-                    timetable.deleteRow(i);
-                    i = 0;
-                    continue;
-                }
-                timetable.rows[i].className = getColorClassName(diff);
-                timetable.rows[i].cells[2].innerText = getTimeDiffAsString(diff);
+                if (diff < 0) return;
+
+                var table = document.getElementById('timetable');
+                var row = table.insertRow(-1);
+                var destination = row.insertCell(-1);
+                var departure = row.insertCell(-1);
+                var timeRemaining = row.insertCell(-1);
+                var remarks = row.insertCell(-1);
+
+                row.className = getColorClassName(diff);
+
+                // 行き先
+                if (data.toType == 0) destination.innerHTML = "八束穂キャンパス";
+                else destination.innerHTML = "扇が丘キャンパス";
+
+                // 出発時間
+                departure.innerHTML = data.departure;
+
+                // 残り時間
+                timeRemaining.innerHTML = getTimeDiffAsString(diff);
+
+                // 備考
+                if (isSunday && data.hasSat && isSummer && data.hasSummer) remarks.innerHTML = "土曜/夏季運行";
+                else if (isSummer && data.hasSummer) remarks.innerHTML = "夏季運行";
+                else if (isSunday && data.hasSat) remarks.innerHTML = "土曜運行";
             }
-            setAnyBusAlertDisplay(hasAnyTable(timetable));
-            setTimeTableVisibility(!hasAnyTable(timetable));
-        }
-        /**
-         * 行追加
-         */
-        function insertRow(data, date, isSummer) {
-
-            // 土曜運行のセルを排除
-            var isSunday = date.getDay() == 6;
-            if (isSunday && !data.hasSat || !isSunday && data.hasSat) return;
-
-            // 夏季運行のセルを排除
-            if (isSummer && !data.hasSummer) return;
-
-            // 出発している便を排除
-            var hour = parseInt(data.departure.substr(0, 2));
-            var min = parseInt(data.departure.substr(3, 4));
-            var second = hour * 60 * 60 + min * 60;
-            var diff = getTimeDiff(second, date);
-            if (diff < 0) return;
-
-            var table = document.getElementById('timetable');
-            var row = table.insertRow(-1);
-            var destination = row.insertCell(-1);
-            var departure = row.insertCell(-1);
-            var timeRemaining = row.insertCell(-1);
-            var remarks = row.insertCell(-1);
-
-            row.className = getColorClassName(diff);
-
-            // 行き先
-            if (data.toType == 0) destination.innerHTML = "八束穂キャンパス";
-            else destination.innerHTML = "扇が丘キャンパス";
-
-            // 出発時間
-            departure.innerHTML = data.departure;
-
-            // 残り時間
-            timeRemaining.innerHTML = getTimeDiffAsString(diff);
-
-            // 備考
-            if (isSunday && data.hasSat && isSummer && data.hasSummer) remarks.innerHTML = "土曜/夏季運行";
-            else if (isSummer && data.hasSummer) remarks.innerHTML = "夏季運行";
-            else if (isSunday && data.hasSat) remarks.innerHTML = "土曜運行";
-        }
-        $(function () {
-            $.getJSON("https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/gh-pages/timetable.json", function (data) {
-                var date = new Date();
-                for (var i = 0; i < data.length; i++) {
-                    insertRow(data[i], date, false);
-                }
-                setInterval('time()', 1000);
-                setTimeout("location.reload()", 1000 * 60 * 60);
+            $(function () {
+                $.getJSON("https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/gh-pages/timetable.json", function (data) {
+                    var date = new Date();
+                    for (var i = 0; i < data.length; i++) {
+                        insertRow(data[i], date, false);
+                    }
+                    setInterval('time()', 1000);
+                    setTimeout("location.reload()", 1000 * 60 * 60);
+                });
             });
-        });
-    </script>
+        </script>
+    </div>
 </body>
 
 </html>
