@@ -34,8 +34,26 @@
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script>
             time();
+            function getColorClassName(diff) {
+                // 残り5分 -> bg-danger
+                if (diff < 60 * 5) {
+                    return 'bg-danger';
+                }
+                // 残り15分 -> bg-warning
+                if (diff < 60 * 15) {
+                    return 'bg-warning';
+                }
+                // 残り1時間 -> bg-success
+                if (diff < 60 * 60) {
+                    return 'bg-success';
+                }
+                return 'bg-white';
+            }
+            function getNowTimeAsSecond(date) {
+                return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
+            }
             function getTimeDiff(second, date) {
-                return second - (date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds());
+                return second - getNowTimeAsSecond(date);
             }
             function getTimeDiffAsString(diff) {
                 return ('00' + Math.floor(diff / 60 / 60)).slice(-2) + ":" +
@@ -55,11 +73,14 @@
                     if (diff < 0) {
                         timetable.deleteRow(i);
                         i = 0;
+                        continue;
                     }
-                    else timetable.rows[i].cells[2].innerText = getTimeDiffAsString(diff);
+                    timetable.rows[i].className = getColorClassName(diff);
+                    timetable.rows[i].cells[2].innerText = getTimeDiffAsString(diff);
                 }
             }
             setInterval('time()', 1000);
+            setTimeout("location.reload()", 1000 * 60 * 60);
             /**
              * 行追加
              */
@@ -85,6 +106,8 @@
                 var departure = row.insertCell(-1);
                 var timeRemaining = row.insertCell(-1);
                 var remarks = row.insertCell(-1);
+
+                row.className = getColorClassName(diff);
 
                 // 行き先
                 if (data.toType == 0) destination.innerHTML = "八束穂キャンパス";
