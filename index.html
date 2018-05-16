@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KIT シャトルバス</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.min.js"></script>
+        <script src="js/respond.min.js"></script>
+      <![endif]-->
+</head>
+
+<body>
+    <h2 id="time">
+        </h1>
+        <table class="table table-bordered" id="timetable">
+            <thead>
+                <tr>
+                    <th>行き先</th>
+                    <th>出発時刻</th>
+                    <th>出発まで</th>
+                    <th>備考</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+
+        <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script>
+            time();
+            function getTimeDiff(second, date) {
+                return second - (date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds());
+            }
+            function getTimeDiffAsString(diff) {
+                return ('00' + Math.floor(diff / 60 / 60)).slice(-2) + ":" +
+                    ('00' + Math.floor((diff / 60) % 60)).slice(-2) + ":" +
+                    ('00' + diff % 60).slice(-2);
+            }
+            function time() {
+                var now = new Date();
+                document.getElementById("time").innerHTML = now.toLocaleTimeString();
+                var timetable = document.getElementById('timetable');
+                var date = new Date();
+                for (var i = 1; i < timetable.rows.length; i++) {
+                    var hour = parseInt(timetable.rows[i].cells[1].innerText.substr(0, 2));
+                    var min = parseInt(timetable.rows[i].cells[1].innerText.substr(3, 4));
+                    var second = hour * 60 * 60 + min * 60;
+                    var diff = getTimeDiff(second, date);
+                    if (diff < 0) {
+                        timetable.deleteRow(i);
+                        i = 0;
+                    }
+                    else timetable.rows[i].cells[2].innerText = getTimeDiffAsString(diff);
+                }
+            }
+            setInterval('time()', 1000);
+            /**
+             * 行追加
+             */
+            function insertRow(data, date, isSummer) {
+
+                // 土曜運行のセルを排除
+                var isSunday = date.getDay() == 6;
+                if (isSunday && !data.hasSat) return;
+
+                // 夏季運行のセルを排除
+                if (isSummer && !data.hasSummer) return;
+
+                // 出発している便を排除
+                var hour = parseInt(data.departure.substr(0, 2));
+                var min = parseInt(data.departure.substr(3, 4));
+                var second = hour * 60 * 60 + min * 60;
+                var diff = getTimeDiff(second, date);
+                if (diff < 0) return;
+
+                var table = document.getElementById('timetable');
+                var row = table.insertRow(-1);
+                var destination = row.insertCell(-1);
+                var departure = row.insertCell(-1);
+                var timeRemaining = row.insertCell(-1);
+                var remarks = row.insertCell(-1);
+
+                // 行き先
+                if (data.toType == 0) destination.innerHTML = "八束穂キャンパス";
+                else destination.innerHTML = "扇が丘キャンパス";
+
+                // 出発時間
+                departure.innerHTML = data.departure;
+
+                // 残り時間
+                timeRemaining.innerHTML = getTimeDiffAsString(diff);
+
+                // 備考
+                if (isSunday && data.hasSat && isSummer && data.hasSummer) remarks.innerHTML = "土曜/夏季運行";
+                else if (isSummer && data.hasSummer) remarks.innerHTML = "夏季運行";
+                else if (isSunday && data.hasSat) remarks.innerHTML = "土曜運行";
+            }
+            $(function () {
+                $.getJSON("https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/gh-pages/timetable.json", function (data) {
+                    var date = new Date();
+                    for (var i = 0; i < data.length; i++) {
+                        insertRow(data[i], date, false);
+                    }
+                });
+            });
+        </script>
+</body>
+
+</html>
