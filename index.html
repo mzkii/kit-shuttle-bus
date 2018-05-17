@@ -23,13 +23,22 @@
         <br>
         <div class="alert alert-success" role="alert" id="alert-success" style="display:none"></div>
         <div class="alert alert-danger" role="alert" id="alert-danger" style="display:none">本日の運行は終了しました</div>
-        <table class="table table-bordered" id="timetable" style="display:none">
+        <div class="form-group">
+            <label>出発地:</label>
+            <select class="form-control" id="sel">
+                <option>扇が丘キャンパス(23号館横)</option>
+                <option>八束穂キャンパス(61号館前)</option>
+                <option>八束穂キャンパス(65号館前)</option>
+                <option>八束穂キャンパス(74号館前)</option>
+            </select>
+        </div>
+        <br>
+        <table class="table table-bordered" id="timetable">
             <thead>
                 <tr>
                     <th>行き先</th>
                     <th>出発時刻</th>
                     <th>出発まで</th>
-                    <th>備考</th>
                 </tr>
             </thead>
             <tbody id="tbody"></tbody>
@@ -161,27 +170,116 @@
             /**
              * 行追加
              */
-            function insertRow(data) {
-                var table = document.getElementById('timetable');
-                var row = table.insertRow(-1);
-                var destination = row.insertCell(-1);   // 行き先
-                var departure = row.insertCell(-1);     // 出発時間
+            function insertRow(toTypeAsString, timeTable) {
+
+
+                ow.insertCell(-1).innerHTML = "";     // 出発時間
                 var timeRemaining = row.insertCell(-1); // 出発まで
                 var remarks = row.insertCell(-1);       // 備考
-                destination.innerHTML = (data.toType == 0 ? "八束穂" : "扇が丘") + "キャンパス";
                 departure.innerHTML = data.departure;
                 //row.style.display = 'none';
+            }
+
+            function getTimeTableFromIsAbsence(jsonData, isAbsence) {
+                return isAbsence ? jsonData.absence : jsonData.semester;
+            }
+
+            function getTimeTableFromIsSaturday(jsonData, isSaturday) {
+                return isSaturday ? jsonData.saturday : jsonData.weekday;
+            }
+
+            function getTimeTableFromJson(jsonData, isAbsence, isSaturday) {
+                return getTimeTableFromIsSaturday(getTimeTableFromIsAbsence(jsonData, isAbsence), isSaturday);
             }
             /**
              * ページ読み込み完了時
              */
             $(function () {
-                $.getJSON("https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/gh-pages/timetable.json", function (data) {
-                    for (var i = 0; i < data.length; i++) insertRow(data[i]);
-                    setInterval(function () { updateTimeTable(data) }, 1000);
-                    updateTimeTable(data);
-                    document.getElementById("timetable").style.display = '';
-                });
+                $.getJSON("https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/master/newTimeTable.json",
+                    function (jsonData) {
+
+                        var date = new Date();
+                        /**
+                         * TODO: 日付の範囲を求める．
+                         * 期間：平成30年4月1日（日）～8月5日（日）、9月8日（土）～平成31年2月28日（木）
+                         */
+                        var isAbsence = false;
+                        var isSaturday = date.getDay == 6;
+                        var timeTable = getTimeTableFromJson(jsonData, isAbsence, isSaturday);
+
+                        var selText = $("#sel option:selected").text();
+
+                        // 扇が丘 -> 八束穂
+                        switch (selText) {
+                            case :
+                                break;
+                        }
+                        if (selText == ) {
+
+                        }
+                        // 八束穂(61) -> 扇が丘 
+                        if (selText == ) {
+
+                        }
+                        // 八束穂(65) -> 扇が丘 
+                        if (selText == ) {
+
+                        }
+                        // 八束穂(74) -> 扇が丘 
+                        if (selText == ) {
+
+                        }
+
+                        var f = {}
+                        f['a'] = function () {
+                            return 1;
+                        };
+                        f['b'] = function () {
+                            return 2;
+                        };
+                        f['c'] = function () {
+                            return 3;
+                        };
+
+                        var v = _.sample([
+                            "扇が丘キャンパス(23号館横)",
+                            "八束穂キャンパス(61号館前)",
+                            "八束穂キャンパス(65号館前)",
+                            "八束穂キャンパス(74号館前)"]);
+                        f[v]();
+
+
+                        var table = document.getElementById('timetable');
+                        timeTable.toLab.forEach(function (value) {
+                            var row = table.insertRow(-1);
+                            row.insertCell(-1).innerHTML = "八束穂キャンパス"; // 行き先
+                            row.insertCell(-1).innerHTML = value.departure[0]; // 出発時間
+                            row.insertCell(-1).innerHTML = "-"; // 出発までの残り時間
+                        });
+
+
+                        /*
+    
+                        console.log("前期，後期:");
+                        console.log("八束穂行き:");
+                        */
+
+                        //console.log(data.semester.weekday.toLab[0].departure[0]);
+
+
+                        /*
+                        console.log("扇が丘行き:");
+                        for (var i = 0; i < data.semester.weekday.toCollege.length; i++) {
+                            var data = data.semester.weekday.toCollege[i];
+                            console.log("%d/%d %s", i + 1, size, data.departure[0]);
+                        }
+    
+                        for (var i = 0; i < data.length; i++) insertRow(data[i]);
+                        setInterval(function () { updateTimeTable(data) }, 1000);
+                        updateTimeTable(data);
+                        document.getElementById("timetable").style.display = '';
+                        */
+                    });
             });
         </script>
     </div>
