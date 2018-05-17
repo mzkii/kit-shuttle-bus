@@ -57,7 +57,7 @@
             }
             function getNowTimeAsSecond() {
                 var date = new Date();
-                return (date.getHours()) * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
+                return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
             }
             function getTimeDiff(second) {
                 return second - getNowTimeAsSecond();
@@ -175,6 +175,10 @@
                         setInterval(function () { updateTimeTable(isAbsence, isSaturday) }, 1000);
                         updateTimeTable();
                     });
+                $("#sel").change(function () {
+                    // var sVal = $("#sel").val();
+                    location.reload();
+                });
             });
         </script>
     </div>
