@@ -23,8 +23,7 @@
         <br>
         <div class="alert alert-success" role="alert" id="alert-success" style="display:none"></div>
         <div class="alert alert-danger" role="alert" id="alert-danger" style="display:none">本日の運行は終了しました</div>
-
-        <table class="table table-bordered" id="timetable">
+        <table class="table table-bordered" id="timetable" style="display:none">
             <thead>
                 <tr>
                     <th>行き先</th>
@@ -35,57 +34,80 @@
             </thead>
             <tbody id="tbody"></tbody>
         </table>
-
         <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script>
-            function getColorClassName(diff) {
-                // 残り5分 -> bg-danger
-                if (diff < 60 * 5) {
-                    return 'bg-danger';
-                }
-                // 残り15分 -> bg-warning
-                if (diff < 60 * 15) {
-                    return 'bg-warning';
-                }
-                // 残り1時間 -> bg-success
-                if (diff < 60 * 60) {
-                    return 'bg-success';
-                }
+            /**
+             * getColorClassName(second):
+             * second に応じて，背景色のプロパティ名を文字列として返す，
+             */
+            function getColorClassName(second) {
+                if (second < 60 * 5) return 'bg-danger'; // 残り5分 -> bg-danger
+                if (second < 60 * 15) return 'bg-warning'; // 残り15分 -> bg-warning
+                if (second < 60 * 60) return 'bg-success'; // 残り1時間 -> bg-success
                 return 'bg-white';
             }
-            function getNowTimeAsSecond(date) {
+            /**
+             * getNowTimeAsSecond():
+             * 現在時刻を整数型秒数として返す．
+             */
+            function getNowTimeAsSecond() {
+                var date = new Date();
                 return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
             }
-            function getTimeDiff(second, date) {
-                return second - getNowTimeAsSecond(date);
+            /**
+             * getTimeDiff(second):
+             * 現在時刻と second との差を整数型秒数として求める．
+             */
+            function getTimeDiff(second) {
+                return second - getNowTimeAsSecond();
             }
-            function getTimeDiffAsString(diff) {
-                return ('00' + Math.floor(diff / 60 / 60)).slice(-2) + ":" +
-                    ('00' + Math.floor((diff / 60) % 60)).slice(-2) + ":" +
-                    ('00' + diff % 60).slice(-2);
+            /**
+             * getSecondAsTimeString:
+             * 数値としての秒数を，00:00 の形式に変換し文字列を返す．
+             */
+            function getSecondAsTimeString(second) {
+                return ('00' + Math.floor(second / 60 / 60)).slice(-2) + ":" +
+                    ('00' + Math.floor((second / 60) % 60)).slice(-2) + ":" +
+                    ('00' + second % 60).slice(-2);
             }
+            /**
+             * hasAnyTable(timetable):
+             * timetable 中に，運行予定のバスが存在するか．
+             */
             function hasAnyTable(timetable) {
                 return timetable.rows.length <= 1;
             }
+            /**
+             * setAnyBusAlertDisplay(visibility):
+             * 運行終了のアラートの visibility を設定する．
+             */
             function setAnyBusAlertDisplay(visibility) {
                 var alertDanger = document.getElementById('alert-danger');
                 if (visibility) alertDanger.style.display = "block";
                 else alertDanger.style.display = "none";
             }
+            /**
+             * setTimeTableVisibility(visibility):
+             * 時刻表の visibility を設定する．
+             */
             function setTimeTableVisibility(visibility) {
                 var timetable = document.getElementById('timetable');
                 if (visibility) timetable.style.visibility = "visible";
                 else timetable.style.visibility = "hidden";
             }
-            function time() {
+            /**
+             * updateTimeTable(data):
+             * 時刻表アップデート
+             */
+            var updateTimeTable = function (data) {
                 var timetable = document.getElementById('timetable');
-                var date = new Date();
-                for (var i = 1; i < timetable.rows.length; i++) {
-                    var hour = parseInt(timetable.rows[i].cells[1].innerText.substr(0, 2));
-                    var min = parseInt(timetable.rows[i].cells[1].innerText.substr(3, 4));
+                for (var i = 1; i < data.length; i++) {
+                    var hour = parseInt(data[i].substr(0, 2));
+                    var min = parseInt(data[i].substr(3, 4));
                     var second = hour * 60 * 60 + min * 60;
-                    var diff = getTimeDiff(second, date);
+
+                    // 現在の時刻から，出発時刻との差を求める．
+                    var diff = getTimeDiff(second);
                     if (diff < 0) {
                         timetable.deleteRow(i);
                         i = 0;
@@ -96,12 +118,18 @@
                 }
                 setAnyBusAlertDisplay(hasAnyTable(timetable));
                 setTimeTableVisibility(!hasAnyTable(timetable));
-            }
-            /**
-             * 行追加
-             */
-            function insertRow(data, date, isSummer) {
 
+
+
+
+
+                row.className = getColorClassName(diff);
+
+
+                var date = new Date();
+                var isSummer = false;
+
+                /*
                 // 土曜運行のセルを排除
                 var isSunday = date.getDay() == 6;
                 if (isSunday && !data.hasSat || !isSunday && data.hasSat) return;
@@ -115,39 +143,44 @@
                 var second = hour * 60 * 60 + min * 60;
                 var diff = getTimeDiff(second, date);
                 if (diff < 0) return;
+                */
 
-                var table = document.getElementById('timetable');
-                var row = table.insertRow(-1);
-                var destination = row.insertCell(-1);
-                var departure = row.insertCell(-1);
-                var timeRemaining = row.insertCell(-1);
-                var remarks = row.insertCell(-1);
-
-                row.className = getColorClassName(diff);
 
                 // 行き先
-                if (data.toType == 0) destination.innerHTML = "八束穂キャンパス";
-                else destination.innerHTML = "扇が丘キャンパス";
-
-                // 出発時間
+                destination.innerHTML = (data.toType == 0 ? "八束穂" : "扇が丘") + "キャンパス";
                 departure.innerHTML = data.departure;
-
-                // 残り時間
                 timeRemaining.innerHTML = getTimeDiffAsString(diff);
+                remarks.innerHTML = "";
 
-                // 備考
+                /*
                 if (isSunday && data.hasSat && isSummer && data.hasSummer) remarks.innerHTML = "土曜/夏季運行";
                 else if (isSummer && data.hasSummer) remarks.innerHTML = "夏季運行";
                 else if (isSunday && data.hasSat) remarks.innerHTML = "土曜運行";
+                */
             }
+            /**
+             * 行追加
+             */
+            function insertRow(data) {
+                var table = document.getElementById('timetable');
+                var row = table.insertRow(-1);
+                var destination = row.insertCell(-1);   // 行き先
+                var departure = row.insertCell(-1);     // 出発時間
+                var timeRemaining = row.insertCell(-1); // 出発まで
+                var remarks = row.insertCell(-1);       // 備考
+                destination.innerHTML = (data.toType == 0 ? "八束穂" : "扇が丘") + "キャンパス";
+                departure.innerHTML = data.departure;
+                //row.style.display = 'none';
+            }
+            /**
+             * ページ読み込み完了時
+             */
             $(function () {
                 $.getJSON("https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/gh-pages/timetable.json", function (data) {
-                    var date = new Date();
-                    for (var i = 0; i < data.length; i++) {
-                        insertRow(data[i], date, false);
-                    }
-                    setInterval('time()', 1000);
-                    setTimeout("location.reload()", 1000 * 60 * 60);
+                    for (var i = 0; i < data.length; i++) insertRow(data[i]);
+                    setInterval(function () { updateTimeTable(data) }, 1000);
+                    updateTimeTable(data);
+                    document.getElementById("timetable").style.display = '';
                 });
             });
         </script>
