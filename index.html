@@ -101,6 +101,7 @@
                     var diff = getTimeDiff(getSecondFromTimeFormat(departure));
                     if (diff >= 0) {
                         table.rows[i].cells[2].firstChild.data = getTimeFormatStringFromSecond(diff);
+                        timetable.rows[i].className = getColorClassName(diff);
                         visibleRowsLength++;
                     } else {
                         table.rows[i].style.display = "none";
