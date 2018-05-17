@@ -18,11 +18,11 @@
 
 <body>
     <div class="container">
-        <br>
         <h2>KIT シャトルバス時刻表</h2>
         <br>
         <div class="alert alert-success" role="alert" id="alert-success" style="display:none"></div>
         <div class="alert alert-danger" role="alert" id="alert-danger" style="display:none">本日の運行は終了しました</div>
+        <br>
         <div class="form-group">
             <label>出発地:</label>
             <select class="form-control" id="sel">
@@ -33,7 +33,7 @@
             </select>
         </div>
         <br>
-        <table class="table table-bordered" id="timetable">
+        <table class="table table-bordered" id="timetable" style="visibility:hidden">
             <thead>
                 <tr>
                     <th>行き先</th>
@@ -45,240 +45,135 @@
         </table>
         <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
         <script>
-            /**
-             * getColorClassName(second):
-             * second に応じて，背景色のプロパティ名を文字列として返す，
-             */
+            const LAB65 = "八束穂キャンパス(65号館前)";
+            const LAB61 = "八束穂キャンパス(61号館前)";
+            const LAB74 = "八束穂キャンパス(74号館前)";
+            const CAM23 = "扇が丘キャンパス(23号館横)";
             function getColorClassName(second) {
-                if (second < 60 * 5) return 'bg-danger'; // 残り5分 -> bg-danger
-                if (second < 60 * 15) return 'bg-warning'; // 残り15分 -> bg-warning
-                if (second < 60 * 60) return 'bg-success'; // 残り1時間 -> bg-success
+                if (second < 60 * 5) return 'bg-danger';
+                if (second < 60 * 15) return 'bg-warning';
+                if (second < 60 * 60) return 'bg-success';
                 return 'bg-white';
             }
-            /**
-             * getNowTimeAsSecond():
-             * 現在時刻を整数型秒数として返す．
-             */
             function getNowTimeAsSecond() {
                 var date = new Date();
-                return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
+                return (date.getHours()) * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
             }
-            /**
-             * getTimeDiff(second):
-             * 現在時刻と second との差を整数型秒数として求める．
-             */
             function getTimeDiff(second) {
                 return second - getNowTimeAsSecond();
             }
-            /**
-             * getSecondAsTimeString:
-             * 数値としての秒数を，00:00 の形式に変換し文字列を返す．
-             */
-            function getSecondAsTimeString(second) {
+            function getTimeFormatStringFromSecond(second) {
                 return ('00' + Math.floor(second / 60 / 60)).slice(-2) + ":" +
                     ('00' + Math.floor((second / 60) % 60)).slice(-2) + ":" +
                     ('00' + second % 60).slice(-2);
             }
-            /**
-             * hasAnyTable(timetable):
-             * timetable 中に，運行予定のバスが存在するか．
-             */
             function hasAnyTable(timetable) {
                 return timetable.rows.length <= 1;
             }
-            /**
-             * setAnyBusAlertDisplay(visibility):
-             * 運行終了のアラートの visibility を設定する．
-             */
-            function setAnyBusAlertDisplay(visibility) {
-                var alertDanger = document.getElementById('alert-danger');
-                if (visibility) alertDanger.style.display = "block";
-                else alertDanger.style.display = "none";
+            function setBusStatusDisplay(visibility) {
+                var alert = document.getElementById('alert-success');
+                if (visibility) alert.style.display = "block";
+                else alert.style.display = "none";
             }
-            /**
-             * setTimeTableVisibility(visibility):
-             * 時刻表の visibility を設定する．
-             */
+            function setBusStatusText(text) {
+                var alert = document.getElementById('alert-success');
+                alert.innerHTML = text;
+            }
+            function setAnyBusAlertDisplay(visibility) {
+                var alert = document.getElementById('alert-danger');
+                if (visibility) alert.style.display = "block";
+                else alert.style.display = "none";
+            }
             function setTimeTableVisibility(visibility) {
                 var timetable = document.getElementById('timetable');
                 if (visibility) timetable.style.visibility = "visible";
                 else timetable.style.visibility = "hidden";
             }
-            /**
-             * updateTimeTable(data):
-             * 時刻表アップデート
-             */
-            var updateTimeTable = function (data) {
-                var timetable = document.getElementById('timetable');
-                for (var i = 1; i < data.length; i++) {
-                    var hour = parseInt(data[i].substr(0, 2));
-                    var min = parseInt(data[i].substr(3, 4));
-                    var second = hour * 60 * 60 + min * 60;
-
-                    // 現在の時刻から，出発時刻との差を求める．
-                    var diff = getTimeDiff(second);
-                    if (diff < 0) {
-                        timetable.deleteRow(i);
-                        i = 0;
-                        continue;
+            function getSecondFromTimeFormat(timeFormatString) {
+                return parseInt(timeFormatString.substr(0, 2)) * 60 * 60 +
+                    parseInt(timeFormatString.substr(3, 4)) * 60;
+            }
+            var updateTimeTable = function (isAbsence, isSaturday) {
+                var table = document.getElementById('timetable');
+                var visibleRowsLength = 1;
+                for (var i = 1; i < table.rows.length; i++) {
+                    var departure = table.rows[i].cells[1].firstChild.data;
+                    var diff = getTimeDiff(getSecondFromTimeFormat(departure));
+                    if (diff >= 0) {
+                        table.rows[i].cells[2].firstChild.data = getTimeFormatStringFromSecond(diff);
+                        visibleRowsLength++;
+                    } else {
+                        table.rows[i].style.display = "none";
                     }
-                    timetable.rows[i].className = getColorClassName(diff);
-                    timetable.rows[i].cells[2].innerText = getTimeDiffAsString(diff);
                 }
-                setAnyBusAlertDisplay(hasAnyTable(timetable));
-                setTimeTableVisibility(!hasAnyTable(timetable));
-
-
-
-
-
-                row.className = getColorClassName(diff);
-
-
-                var date = new Date();
-                var isSummer = false;
-
-                /*
-                // 土曜運行のセルを排除
-                var isSunday = date.getDay() == 6;
-                if (isSunday && !data.hasSat || !isSunday && data.hasSat) return;
-
-                // 夏季運行のセルを排除
-                if (isSummer && !data.hasSummer) return;
-
-                // 出発している便を排除
-                var hour = parseInt(data.departure.substr(0, 2));
-                var min = parseInt(data.departure.substr(3, 4));
-                var second = hour * 60 * 60 + min * 60;
-                var diff = getTimeDiff(second, date);
-                if (diff < 0) return;
-                */
-
-
-                // 行き先
-                destination.innerHTML = (data.toType == 0 ? "八束穂" : "扇が丘") + "キャンパス";
-                departure.innerHTML = data.departure;
-                timeRemaining.innerHTML = getTimeDiffAsString(diff);
-                remarks.innerHTML = "";
-
-                /*
-                if (isSunday && data.hasSat && isSummer && data.hasSummer) remarks.innerHTML = "土曜/夏季運行";
-                else if (isSummer && data.hasSummer) remarks.innerHTML = "夏季運行";
-                else if (isSunday && data.hasSat) remarks.innerHTML = "土曜運行";
-                */
+                if (visibleRowsLength <= 1) {
+                    setBusStatusDisplay(false);
+                    setAnyBusAlertDisplay(true);
+                    setTimeTableVisibility(false);
+                } else {
+                    if (isAbsence && isSaturday) setBusStatusText("運行中 (土曜・夏期・春期休業期間 スケジュール)");
+                    else if (isAbsence) setBusStatusText("運行中 (夏期・春期休業期間 スケジュール)");
+                    else if (isSaturday) setBusStatusText("運行中 (土曜日 スケジュール)");
+                    else setBusStatusText("運行中");
+                    setBusStatusDisplay(true);
+                    setAnyBusAlertDisplay(false);
+                    setTimeTableVisibility(true);
+                }
             }
-            /**
-             * 行追加
-             */
-            function insertRow(toTypeAsString, timeTable) {
-
-
-                ow.insertCell(-1).innerHTML = "";     // 出発時間
-                var timeRemaining = row.insertCell(-1); // 出発まで
-                var remarks = row.insertCell(-1);       // 備考
-                departure.innerHTML = data.departure;
-                //row.style.display = 'none';
-            }
-
             function getTimeTableFromIsAbsence(jsonData, isAbsence) {
                 return isAbsence ? jsonData.absence : jsonData.semester;
             }
-
             function getTimeTableFromIsSaturday(jsonData, isSaturday) {
                 return isSaturday ? jsonData.saturday : jsonData.weekday;
             }
-
             function getTimeTableFromJson(jsonData, isAbsence, isSaturday) {
-                return getTimeTableFromIsSaturday(getTimeTableFromIsAbsence(jsonData, isAbsence), isSaturday);
+                return getTimeTableFromIsSaturday(
+                    getTimeTableFromIsAbsence(jsonData, isAbsence),
+                    isSaturday
+                );
             }
-            /**
-             * ページ読み込み完了時
-             */
+            function getTimeTableFromDeparture(jsonData, departure) {
+                switch (departure) {
+                    case LAB65: {
+                        jsonData.toCollege.forEach(function (it) { it.departure = [it.departure[0]] });
+                        return jsonData.toCollege;
+                    }
+                    case LAB61: {
+                        jsonData.toCollege.forEach(function (it) { it.departure = [it.departure[1]] });
+                        return jsonData.toCollege;
+                    }
+                    case LAB74: {
+                        jsonData.toCollege.forEach(function (it) { it.departure = [it.departure[2]] });
+                        return jsonData.toCollege;
+                    }
+                    case CAM23:
+                    default:
+                        return jsonData.toLab;
+                }
+            }
             $(function () {
                 $.getJSON("https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/master/newTimeTable.json",
                     function (jsonData) {
-
                         var date = new Date();
                         /**
                          * TODO: 日付の範囲を求める．
                          * 期間：平成30年4月1日（日）～8月5日（日）、9月8日（土）～平成31年2月28日（木）
                          */
                         var isAbsence = false;
-                        var isSaturday = date.getDay == 6;
-                        var timeTable = getTimeTableFromJson(jsonData, isAbsence, isSaturday);
-
+                        var isSaturday = false;
                         var selText = $("#sel option:selected").text();
-
-                        // 扇が丘 -> 八束穂
-                        switch (selText) {
-                            case :
-                                break;
-                        }
-                        if (selText == ) {
-
-                        }
-                        // 八束穂(61) -> 扇が丘 
-                        if (selText == ) {
-
-                        }
-                        // 八束穂(65) -> 扇が丘 
-                        if (selText == ) {
-
-                        }
-                        // 八束穂(74) -> 扇が丘 
-                        if (selText == ) {
-
-                        }
-
-                        var f = {}
-                        f['a'] = function () {
-                            return 1;
-                        };
-                        f['b'] = function () {
-                            return 2;
-                        };
-                        f['c'] = function () {
-                            return 3;
-                        };
-
-                        var v = _.sample([
-                            "扇が丘キャンパス(23号館横)",
-                            "八束穂キャンパス(61号館前)",
-                            "八束穂キャンパス(65号館前)",
-                            "八束穂キャンパス(74号館前)"]);
-                        f[v]();
-
-
-                        var table = document.getElementById('timetable');
-                        timeTable.toLab.forEach(function (value) {
-                            var row = table.insertRow(-1);
-                            row.insertCell(-1).innerHTML = "八束穂キャンパス"; // 行き先
-                            row.insertCell(-1).innerHTML = value.departure[0]; // 出発時間
-                            row.insertCell(-1).innerHTML = "-"; // 出発までの残り時間
+                        var timeTable = getTimeTableFromDeparture(
+                            getTimeTableFromJson(jsonData, isAbsence, isSaturday),
+                            selText
+                        );
+                        timeTable.forEach(function (it) {
+                            var row = document.getElementById('timetable').insertRow(-1);
+                            row.insertCell(-1).innerHTML = selText == CAM23 ? "八束穂キャンパス" : "扇が丘キャンパス";
+                            row.insertCell(-1).innerHTML = it.departure[0];
+                            row.insertCell(-1).innerHTML = "-";
                         });
-
-
-                        /*
-    
-                        console.log("前期，後期:");
-                        console.log("八束穂行き:");
-                        */
-
-                        //console.log(data.semester.weekday.toLab[0].departure[0]);
-
-
-                        /*
-                        console.log("扇が丘行き:");
-                        for (var i = 0; i < data.semester.weekday.toCollege.length; i++) {
-                            var data = data.semester.weekday.toCollege[i];
-                            console.log("%d/%d %s", i + 1, size, data.departure[0]);
-                        }
-    
-                        for (var i = 0; i < data.length; i++) insertRow(data[i]);
-                        setInterval(function () { updateTimeTable(data) }, 1000);
-                        updateTimeTable(data);
-                        document.getElementById("timetable").style.display = '';
-                        */
+                        setInterval(function () { updateTimeTable(isAbsence, isSaturday) }, 1000);
+                        updateTimeTable();
                     });
             });
         </script>
