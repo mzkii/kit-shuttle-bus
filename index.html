@@ -111,9 +111,9 @@
                     setAnyBusAlertDisplay(true);
                     setTimeTableVisibility(false);
                 } else {
-                    if (isAbsence && isSaturday) setBusStatusText("運行中 (土曜・夏期・春期休業期間 スケジュール)");
-                    else if (isAbsence) setBusStatusText("運行中 (夏期・春期休業期間 スケジュール)");
-                    else if (isSaturday) setBusStatusText("運行中 (土曜日 スケジュール)");
+                    if (isAbsence && isSaturday) setBusStatusText("運行中：土曜・夏期・春期休業期間 スケジュール");
+                    else if (isAbsence) setBusStatusText("運行中：夏期・春期休業期間 スケジュール");
+                    else if (isSaturday) setBusStatusText("運行中：土曜日 スケジュール");
                     else setBusStatusText("運行中");
                     setBusStatusDisplay(true);
                     setAnyBusAlertDisplay(false);
@@ -160,7 +160,7 @@
                          * 期間：平成30年4月1日（日）～8月5日（日）、9月8日（土）～平成31年2月28日（木）
                          */
                         var isAbsence = false;
-                        var isSaturday = false;
+                        var isSaturday = date.getDay() == 6;
                         var selText = $("#sel option:selected").text();
                         var timeTable = getTimeTableFromDeparture(
                             getTimeTableFromJson(jsonData, isAbsence, isSaturday),
@@ -173,8 +173,9 @@
                             row.insertCell(-1).innerHTML = "-";
                         });
                         setInterval(function () { updateTimeTable(isAbsence, isSaturday) }, 1000);
-                        updateTimeTable();
+                        updateTimeTable(isAbsence, isSaturday);
                     });
+
                 $("#sel").change(function () {
                     // var sVal = $("#sel").val();
                     location.reload();
