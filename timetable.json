@@ -1,282 +1,500 @@
-﻿[
-	{
-		"toType": "0",
-		"busType": "A",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "08:20",
-		"arrive74": "08:48",
-		"arrive61": "08:49",
-		"arrive65": "08:50"
-	},
-	{
-		"toType": "0",
-		"busType": "土曜1",
-		"hasSat": true,
-		"hasSummer": true,
-		"departure": "08:20",
-		"arrive74": "08:48",
-		"arrive61": "08:49",
-		"arrive65": "08:50"
-	},
-	{
-		"toType": "0",
-		"busType": "1",
-		"hasSat": false,
-		"hasSummer": false,
-		"departure": "08:40",
-		"arrive74": "09:08",
-		"arrive61": "09:09",
-		"arrive65": "09:10"
-	},
-	{
-		"toType": "0",
-		"busType": "C",
-		"hasSat": false,
-		"hasSummer": false,
-		"departure": "09:20",
-		"arrive74": "09:48",
-		"arrive61": "09:49",
-		"arrive65": "09:50"
-	},
-	{
-		"toType": "0",
-		"busType": "3",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "09:40",
-		"arrive74": "10:08",
-		"arrive61": "10:09",
-		"arrive65": "10:10"
-	},
-	{
-		"toType": "0",
-		"busType": "5",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "10:40",
-		"arrive74": "11:08",
-		"arrive61": "11:09",
-		"arrive65": "11:10"
-	},
-	{
-		"toType": "0",
-		"busType": "7",
-		"hasSat": false,
-		"hasSummer": false,
-		"departure": "12:00",
-		"arrive74": "12:28",
-		"arrive61": "12:29",
-		"arrive65": "12:30"
-	},
-	{
-		"toType": "0",
-		"busType": "E",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "12:20",
-		"arrive74": "12:48",
-		"arrive61": "12:49",
-		"arrive65": "12:50"
-	},
-	{
-		"toType": "0",
-		"busType": "9",
-		"hasSat": false,
-		"hasSummer": false,
-		"departure": "13:20",
-		"arrive74": "13:48",
-		"arrive61": "13:49",
-		"arrive65": "13:50"
-	},
-	{
-		"toType": "0",
-		"busType": "土曜3",
-		"hasSat": true,
-		"hasSummer": true,
-		"departure": "13:20",
-		"arrive74": "13:48",
-		"arrive61": "13:49",
-		"arrive65": "13:50"
-	},
-	{
-		"toType": "0",
-		"busType": "11",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "15:00",
-		"arrive74": "15:28",
-		"arrive61": "15:29",
-		"arrive65": "15:30"
-	},
-	{
-		"toType": "0",
-		"busType": "13",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "16:20",
-		"arrive74": "16:48",
-		"arrive61": "16:49",
-		"arrive65": "16:50"
-	},
-	{
-		"toType": "0",
-		"busType": "G",
-		"hasSat": false,
-		"hasSummer": false,
-		"departure": "16:40",
-		"arrive74": "17:08",
-		"arrive61": "17:09",
-		"arrive65": "17:10"
-	},
-	{
-		"toType": "0",
-		"busType": "15",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "17:40",
-		"arrive74": "18:08",
-		"arrive61": "18:09",
-		"arrive65": "18:10"
-	},
-	{
-		"toType": "0",
-		"busType": "17",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "19:00",
-		"arrive74": "19:23",
-		"arrive61": "19:24",
-		"arrive65": "19:25"
-	},
-	{
-		"toType": "1",
-		"busType": "D",
-		"hasSat": false,
-		"hasSummer": false,
-		"departure": "10:20",
-		"arrive23": "10:50",
-		"arrive74": "10:22",
-		"arrive61": "10:21"
-	},
-	{
-		"toType": "1",
-		"busType": "6",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "11:20",
-		"arrive23": "11:50",
-		"arrive74": "11:22",
-		"arrive61": "11:21"
-	},
-	{
-		"toType": "1",
-		"busType": "8",
-		"hasSat": false,
-		"hasSummer": false,
-		"departure": "12:40",
-		"arrive23": "13:10",
-		"arrive74": "12:42",
-		"arrive61": "12:41"
-	},
-	{
-		"toType": "1",
-		"busType": "土曜2",
-		"hasSat": true,
-		"hasSummer": true,
-		"departure": "12:40",
-		"arrive23": "13:10",
-		"arrive74": "12:42",
-		"arrive61": "12:41"
-	},
-	{
-		"toType": "1",
-		"busType": "10",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "14:00",
-		"arrive23": "14:30",
-		"arrive74": "14:02",
-		"arrive61": "14:01"
-	},
-	{
-		"toType": "1",
-		"busType": "土曜4",
-		"hasSat": true,
-		"hasSummer": true,
-		"departure": "14:40",
-		"arrive23": "15:10",
-		"arrive74": "14:42",
-		"arrive61": "14:41"
-	},
-	{
-		"toType": "1",
-		"busType": "F",
-		"hasSat": false,
-		"hasSummer": false,
-		"departure": "15:00",
-		"arrive23": "15:30",
-		"arrive74": "15:02",
-		"arrive61": "15:01"
-	},
-	{
-		"toType": "1",
-		"busType": "12",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "15:40",
-		"arrive23": "16:10",
-		"arrive74": "15:42",
-		"arrive61": "15:41"
-	},
-	{
-		"toType": "1",
-		"busType": "14",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "17:00",
-		"arrive23": "17:30",
-		"arrive74": "17:02",
-		"arrive61": "17:01"
-	},
-	{
-		"toType": "1",
-		"busType": "H",
-		"hasSat": false,
-		"hasSummer": false,
-		"departure": "17:40",
-		"arrive23": "18:10",
-		"arrive74": "17:42",
-		"arrive61": "17:41"
-	},
-	{
-		"toType": "1",
-		"busType": "16",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "18:20",
-		"arrive23": "18:50",
-		"arrive74": "18:22",
-		"arrive61": "18:21"
-	},
-	{
-		"toType": "1",
-		"busType": "18",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "20:00",
-		"arrive23": "20:25",
-		"arrive74": "20:02",
-		"arrive61": "20:01"
-	},
-	{
-		"toType": "1",
-		"busType": "20",
-		"hasSat": false,
-		"hasSummer": true,
-		"departure": "21:00",
-		"arrive23": "21:25",
-		"arrive74": "21:02",
-		"arrive61": "21:01"
-	}
-]
+{
+    "semester": {
+        "weekday": {
+            "toLab": [
+                {
+                    "departure": [
+                        "08:20"
+                    ],
+                    "arrive": [
+                        "08:48",
+                        "08:49",
+                        "08:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "08:40"
+                    ],
+                    "arrive": [
+                        "09:08",
+                        "09:09",
+                        "09:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "09:20"
+                    ],
+                    "arrive": [
+                        "09:48",
+                        "09:49",
+                        "09:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "09:40"
+                    ],
+                    "arrive": [
+                        "10:08",
+                        "10:09",
+                        "10:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "10:40"
+                    ],
+                    "arrive": [
+                        "11:08",
+                        "11:09",
+                        "11:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "12:00"
+                    ],
+                    "arrive": [
+                        "12:28",
+                        "12:29",
+                        "12:30"
+                    ]
+                },
+                {
+                    "departure": [
+                        "12:20"
+                    ],
+                    "arrive": [
+                        "12:48",
+                        "12:49",
+                        "12:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "13:20"
+                    ],
+                    "arrive": [
+                        "13:48",
+                        "13:49",
+                        "13:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "15:00"
+                    ],
+                    "arrive": [
+                        "15:28",
+                        "15:29",
+                        "15:30"
+                    ]
+                },
+                {
+                    "departure": [
+                        "16:20"
+                    ],
+                    "arrive": [
+                        "16:48",
+                        "16:49",
+                        "16:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "16:40"
+                    ],
+                    "arrive": [
+                        "17:08",
+                        "17:09",
+                        "17:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "17:40"
+                    ],
+                    "arrive": [
+                        "18:08",
+                        "18:09",
+                        "18:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "19:00"
+                    ],
+                    "arrive": [
+                        "19:23",
+                        "19:24",
+                        "19:25"
+                    ]
+                }
+            ],
+            "toCollege": [
+                {
+                    "departure": [
+                        "10:20",
+                        "10:21",
+                        "10:22"
+                    ],
+                    "arrive": [
+                        "10:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "11:20",
+                        "11:21",
+                        "11:22"
+                    ],
+                    "arrive": [
+                        "11:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "12:40",
+                        "12:41",
+                        "12:42"
+                    ],
+                    "arrive": [
+                        "13:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "14:00",
+                        "14:01",
+                        "14:02"
+                    ],
+                    "arrive": [
+                        "14:30"
+                    ]
+                },
+                {
+                    "departure": [
+                        "15:00",
+                        "15:01",
+                        "15:02"
+                    ],
+                    "arrive": [
+                        "15:30"
+                    ]
+                },
+                {
+                    "departure": [
+                        "15:40",
+                        "15:41",
+                        "15:42"
+                    ],
+                    "arrive": [
+                        "16:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "17:00",
+                        "17:01",
+                        "17:02"
+                    ],
+                    "arrive": [
+                        "17:30"
+                    ]
+                },
+                {
+                    "departure": [
+                        "17:40",
+                        "17:41",
+                        "17:42"
+                    ],
+                    "arrive": [
+                        "18:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "18:20",
+                        "18:21",
+                        "18:22"
+                    ],
+                    "arrive": [
+                        "18:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "20:00",
+                        "20:01",
+                        "20:02"
+                    ],
+                    "arrive": [
+                        "20:25"
+                    ]
+                },
+                {
+                    "departure": [
+                        "21:00",
+                        "21:01",
+                        "21:02"
+                    ],
+                    "arrive": [
+                        "21:25"
+                    ]
+                }
+            ]
+        },
+        "saturday": {
+            "toLab": [
+                {
+                    "departure": [
+                        "08:20"
+                    ],
+                    "arrive": [
+                        "08:48",
+                        "08:49",
+                        "08:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "13:20"
+                    ],
+                    "arrive": [
+                        "13:48",
+                        "13:49",
+                        "13:50"
+                    ]
+                }
+            ],
+            "toCollege": [
+                {
+                    "departure": [
+                        "12:40",
+                        "12:41",
+                        "12:42"
+                    ],
+                    "arrive": [
+                        "13:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "14:40",
+                        "14:41",
+                        "14:42"
+                    ],
+                    "arrive": [
+                        "15:10"
+                    ]
+                }
+            ]
+        }
+    },
+    "absence": {
+        "weekday": {
+            "toLab": [
+                {
+                    "departure": [
+                        "08:20"
+                    ],
+                    "arrive": [
+                        "08:48",
+                        "08:49",
+                        "08:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "09:40"
+                    ],
+                    "arrive": [
+                        "10:08",
+                        "10:09",
+                        "10:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "10:40"
+                    ],
+                    "arrive": [
+                        "11:08",
+                        "11:09",
+                        "11:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "12:20"
+                    ],
+                    "arrive": [
+                        "12:48",
+                        "12:49",
+                        "12:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "15:00"
+                    ],
+                    "arrive": [
+                        "15:28",
+                        "15:29",
+                        "15:30"
+                    ]
+                },
+                {
+                    "departure": [
+                        "16:20"
+                    ],
+                    "arrive": [
+                        "16:48",
+                        "16:49",
+                        "16:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "17:40"
+                    ],
+                    "arrive": [
+                        "18:08",
+                        "18:09",
+                        "18:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "19:00"
+                    ],
+                    "arrive": [
+                        "19:23",
+                        "19:24",
+                        "19:25"
+                    ]
+                }
+            ],
+            "toCollege": [
+                {
+                    "departure": [
+                        "11:20",
+                        "11:21",
+                        "11:22"
+                    ],
+                    "arrive": [
+                        "11:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "14:00",
+                        "14:01",
+                        "14:02"
+                    ],
+                    "arrive": [
+                        "14:30"
+                    ]
+                },
+                {
+                    "departure": [
+                        "15:40",
+                        "15:41",
+                        "15:42"
+                    ],
+                    "arrive": [
+                        "16:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "17:00",
+                        "17:01",
+                        "17:02"
+                    ],
+                    "arrive": [
+                        "17:30"
+                    ]
+                },
+                {
+                    "departure": [
+                        "18:20",
+                        "18:21",
+                        "18:22"
+                    ],
+                    "arrive": [
+                        "18:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "20:00",
+                        "20:01",
+                        "20:02"
+                    ],
+                    "arrive": [
+                        "20:25"
+                    ]
+                },
+                {
+                    "departure": [
+                        "21:00",
+                        "21:01",
+                        "21:02"
+                    ],
+                    "arrive": [
+                        "21:25"
+                    ]
+                }
+            ]
+        },
+        "saturday": {
+            "toLab": [
+                {
+                    "departure": [
+                        "08:20"
+                    ],
+                    "arrive": [
+                        "08:48",
+                        "08:49",
+                        "08:50"
+                    ]
+                },
+                {
+                    "departure": [
+                        "13:20"
+                    ],
+                    "arrive": [
+                        "13:48",
+                        "13:49",
+                        "13:50"
+                    ]
+                }
+            ],
+            "toCollege": [
+                {
+                    "departure": [
+                        "12:40",
+                        "12:41",
+                        "12:42"
+                    ],
+                    "arrive": [
+                        "13:10"
+                    ]
+                },
+                {
+                    "departure": [
+                        "14:40",
+                        "14:41",
+                        "14:42"
+                    ],
+                    "arrive": [
+                        "15:10"
+                    ]
+                }
+            ]
+        }
+    }
+}
