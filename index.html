@@ -151,7 +151,14 @@
                         return jsonData.toLab;
                 }
             }
-            $(function () {
+            function deleleTable() {
+                var table = document.getElementById("timetable");
+                var length = table.rows.length;
+                for (var i = 0; i < length - 1; i++) {
+                    table.deleteRow(1);
+                }
+            }
+            var initTable = function () {
                 $.getJSON("https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/master/newTimeTable.json",
                     function (jsonData) {
                         var date = new Date();
@@ -175,10 +182,12 @@
                         setInterval(function () { updateTimeTable(isAbsence, isSaturday) }, 1000);
                         updateTimeTable(isAbsence, isSaturday);
                     });
-
+            }
+            $(function () {
+                initTable();
                 $("#sel").change(function () {
-                    // var sVal = $("#sel").val();
-                    location.reload();
+                    deleleTable();
+                    initTable();
                 });
             });
         </script>
