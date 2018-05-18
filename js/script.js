@@ -138,17 +138,17 @@ function getAbsence(date) {
 var initTable = function () {
     $.getJSON(JSON_POSITION, function (jsonData) {
         var date = new Date();
-        var isAbsence = getAbsence(date);
         var selText = $("#sel option:selected").text();
-        var timeTable = getTimeTableFromDeparture(getTimeTableFromJson(jsonData, isAbsence, date.getDay()), selText);
+        var timeTable = getTimeTableFromDeparture(
+            getTimeTableFromJson(jsonData, getAbsence(date), date.getDay()), selText);
         timeTable.forEach(function (it) {
             var row = document.getElementById("timetable").insertRow(-1);
             row.insertCell(-1).innerHTML = selText == CAM23 ? "八束穂キャンパス" : "扇が丘キャンパス";
             row.insertCell(-1).innerHTML = it.departure[0];
             row.insertCell(-1).innerHTML = "-";
         });
-        setInterval(function () { updateTimeTable(isAbsence, date.getDay()) }, 1000);
-        updateTimeTable(isAbsence, date.getDay());
+        setInterval(function () { updateTimeTable(getAbsence(date), date.getDay()) }, 1000);
+        updateTimeTable(getAbsence(date), date.getDay());
     });
 }
 $(function () {
