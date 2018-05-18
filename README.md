@@ -1,6 +1,4 @@
-## kit-shuttle-bus
-
-### About
+## About
 
 <img src="bus.png" width="128px">
 
@@ -10,7 +8,7 @@ I got the bus timetable from the university website [here](http://www.kanazawa-i
 
 
 
-### Contact
+## Contact
 
 If the time on the bus is incorrect, or the site did not work well, 
 
@@ -20,6 +18,6 @@ or send an issue or pull request.
 
 
 
-### License
+## License
 
 MIT
