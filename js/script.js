@@ -1,8 +1,8 @@
 const JSON_POSITION = "https://raw.githubusercontent.com/mzkii/kit-shuttle-bus/master/newTimeTable.json";
-const BUS_STATUS_ABS_SUM = "運行中：土曜・夏期・春期休業期間 スケジュール";
-const BUS_STATUS_ABS = "運行中：夏期・春期休業期間 スケジュール";
-const BUS_STATUS_SUM = "運行中：土曜日 スケジュール";
-const BUS_STATUS_NOR = "運行中";
+const BUS_STATUS_ABS_SUM = "<strong>運行中：</strong><br><br>土曜日 スケジュール<br><br>夏期・春期休業期間 スケジュール<br><br>平成30年8月6日（月）～9月7日（金）、平成31年3月1日（木）～3月29日（金）";
+const BUS_STATUS_ABS = "<strong>運行中：</strong><br><br>夏期・春期休業期間 スケジュール<br><br>平成30年8月6日（月）～9月7日（金）、平成31年3月1日（木）～3月29日（金）";
+const BUS_STATUS_SUM = "<strong>運行中：</strong><br><br>土曜日 スケジュール";
+const BUS_STATUS_NOR = "<strong>運行中</strong>";
 const LAB65 = "八束穂キャンパス(65号館前)";
 const LAB61 = "八束穂キャンパス(61号館前)";
 const LAB74 = "八束穂キャンパス(74号館前)";
@@ -128,19 +128,19 @@ function deleleTable() {
         table.deleteRow(1);
     }
 }
+function getAbsence(date) {
+    var d20180806 = new Date(2018, 8, 6);
+    var d20180907 = new Date(2018, 9, 7);
+    var d20190301 = new Date(2019, 3, 1);
+    var d20190329 = new Date(2019, 3, 29);
+    return d20180806 <= date && date <= d20180907 || d20190301 <= date && date <= d20190329;
+}
 var initTable = function () {
     $.getJSON(JSON_POSITION, function (jsonData) {
         var date = new Date();
-        /**
-         * TODO: 日付の範囲を求める．
-         * 期間：平成30年4月1日（日）～8月5日（日）、9月8日（土）～平成31年2月28日（木）
-         */
-        var isAbsence = false;
+        var isAbsence = getAbsence(date);
         var selText = $("#sel option:selected").text();
-        var timeTable = getTimeTableFromDeparture(
-            getTimeTableFromJson(jsonData, isAbsence, date.getDay()),
-            selText
-        );
+        var timeTable = getTimeTableFromDeparture(getTimeTableFromJson(jsonData, isAbsence, date.getDay()), selText);
         timeTable.forEach(function (it) {
             var row = document.getElementById("timetable").insertRow(-1);
             row.insertCell(-1).innerHTML = selText == CAM23 ? "八束穂キャンパス" : "扇が丘キャンパス";
