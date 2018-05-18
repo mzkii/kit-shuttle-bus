@@ -7,6 +7,7 @@ const LAB65 = "八束穂キャンパス(65号館前)";
 const LAB61 = "八束穂キャンパス(61号館前)";
 const LAB74 = "八束穂キャンパス(74号館前)";
 const CAM23 = "扇が丘キャンパス(23号館横)";
+const OUT_OF_SERVICE = "現在運行予定の便はありません";
 function getColorClassName(second) {
     if (second < 60 * 5) return "bg-danger";
     if (second < 60 * 15) return "bg-warning";
@@ -37,6 +38,10 @@ function setBusStatusText(text) {
     var alert = document.getElementById("alert-success");
     alert.innerHTML = text;
 }
+function setAnyBusAlertText(text) {
+    var alert = document.getElementById("alert-danger");
+    alert.innerHTML = text;
+}
 function setAnyBusAlertDisplay(visibility) {
     var alert = document.getElementById("alert-danger");
     if (visibility) alert.style.display = "block";
@@ -51,7 +56,7 @@ function getSecondFromTimeFormat(timeFormatString) {
     return parseInt(timeFormatString.substr(0, 2)) * 60 * 60 +
         parseInt(timeFormatString.substr(3, 4)) * 60;
 }
-var updateTimeTable = function (isAbsence, isSaturday) {
+var updateTimeTable = function (isAbsence, day) {
     var table = document.getElementById("timetable");
     var visibleRowsLength = 1;
     for (var i = 1; i < table.rows.length; i++) {
@@ -67,9 +72,11 @@ var updateTimeTable = function (isAbsence, isSaturday) {
     }
     if (visibleRowsLength <= 1) {
         setBusStatusDisplay(false);
+        setAnyBusAlertText(OUT_OF_SERVICE);
         setAnyBusAlertDisplay(true);
         setTimeTableVisibility(false);
     } else {
+        var isSaturday = day == 6;
         if (isAbsence && isSaturday) setBusStatusText(BUS_STATUS_ABS_SUM);
         else if (isAbsence) setBusStatusText(BUS_STATUS_ABS);
         else if (isSaturday) setBusStatusText(BUS_STATUS_SUM);
@@ -82,13 +89,17 @@ var updateTimeTable = function (isAbsence, isSaturday) {
 function getTimeTableFromIsAbsence(jsonData, isAbsence) {
     return isAbsence ? jsonData.absence : jsonData.semester;
 }
-function getTimeTableFromIsSaturday(jsonData, isSaturday) {
-    return isSaturday ? jsonData.saturday : jsonData.weekday;
+function getTimeTableFromDay(jsonData, day) {
+    switch (day) {
+        case 0: return jsonData.other;      // 日曜日
+        case 6: return jsonData.saturday;   // 土曜日
+        default: return jsonData.weekday;   // 平日
+    }
 }
-function getTimeTableFromJson(jsonData, isAbsence, isSaturday) {
-    return getTimeTableFromIsSaturday(
+function getTimeTableFromJson(jsonData, isAbsence, day) {
+    return getTimeTableFromDay(
         getTimeTableFromIsAbsence(jsonData, isAbsence),
-        isSaturday
+        day
     );
 }
 function getTimeTableFromDeparture(jsonData, departure) {
@@ -125,10 +136,9 @@ var initTable = function () {
          * 期間：平成30年4月1日（日）～8月5日（日）、9月8日（土）～平成31年2月28日（木）
          */
         var isAbsence = false;
-        var isSaturday = date.getDay() == 6;
         var selText = $("#sel option:selected").text();
         var timeTable = getTimeTableFromDeparture(
-            getTimeTableFromJson(jsonData, isAbsence, isSaturday),
+            getTimeTableFromJson(jsonData, isAbsence, date.getDay()),
             selText
         );
         timeTable.forEach(function (it) {
@@ -137,8 +147,8 @@ var initTable = function () {
             row.insertCell(-1).innerHTML = it.departure[0];
             row.insertCell(-1).innerHTML = "-";
         });
-        setInterval(function () { updateTimeTable(isAbsence, isSaturday) }, 1000);
-        updateTimeTable(isAbsence, isSaturday);
+        setInterval(function () { updateTimeTable(isAbsence, date.getDay()) }, 1000);
+        updateTimeTable(isAbsence, date.getDay());
     });
 }
 $(function () {
