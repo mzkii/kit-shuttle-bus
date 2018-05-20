@@ -91,7 +91,7 @@ function getTimeTableFromIsAbsence(jsonData, isAbsence) {
 }
 function getTimeTableFromDay(jsonData, day) {
     switch (day) {
-        //case 0: return jsonData.other;      // 日曜日
+        case 0: return jsonData.other;      // 日曜日
         case 6: return jsonData.saturday;   // 土曜日
         default: return jsonData.weekday;   // 平日
     }
