@@ -17,26 +17,26 @@
 </head>
 
 <body>
-    <div class="page-header">
+    <nav class="navbar navbar-default">
         <div class="container">
-            <h1>KIT シャトルバス</h1>
-            <br>
-            <div class="form-group">
-                <label>出発地:</label>
-                <select class="form-control" id="sel">
-                    <option>扇が丘キャンパス(23号館横)</option>
-                    <option>八束穂キャンパス(61号館前)</option>
-                    <option>八束穂キャンパス(65号館前)</option>
-                    <option>八束穂キャンパス(74号館前)</option>
-                </select>
+            <div class="navbar-header">
+                <a class="navbar-brand">KIT シャトルバス</a>
             </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="alert alert-success" role="alert" id="alert-success" style="display:none"></div>
+        <div class="alert alert-danger" role="alert" id="alert-danger" style="display:none"></div>
+        <div class="form-group">
+            <select class="form-control" id="sel">
+                <option>扇が丘キャンパス(23号館横)</option>
+                <option>八束穂キャンパス(61号館前)</option>
+                <option>八束穂キャンパス(65号館前)</option>
+                <option>八束穂キャンパス(74号館前)</option>
+            </select>
         </div>
     </div>
     <div class="container">
-        <br>
-        <div class="alert alert-success" role="alert" id="alert-success" style="display:none"></div>
-        <div class="alert alert-danger" role="alert" id="alert-danger" style="display:none"></div>
-        <br>
         <table class="table" id="timetable" style="visibility:hidden">
             <thead>
                 <tr>
