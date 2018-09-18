@@ -133,7 +133,7 @@ function getAbsence(date) {
     var d20180907 = new Date(2018, 9, 7);
     var d20190301 = new Date(2019, 3, 1);
     var d20190329 = new Date(2019, 3, 29);
-    return d20180806 <= date && date <= d20180907 || d20190301 <= date && date <= d20190329;
+    return (d20180806 <= date && date <= d20180907) || (d20190301 <= date && date <= d20190329);
 }
 var initTable = function () {
     $.getJSON(JSON_POSITION, function (jsonData) {
